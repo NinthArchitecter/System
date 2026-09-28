@@ -1,0 +1,36 @@
+{
+  "name": "SYSTEM — Трекер снижения веса",
+  "short_name": "SYSTEM",
+  "description": "Персональный трекер снижения веса в стилистике Solo Leveling: дневник, калории, тренировки, задания, XP и ранги.",
+  "lang": "ru",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "system-solo-weight-tracker",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#05060d",
+  "theme_color": "#05060d",
+  "categories": ["health", "fitness", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/img/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Взвеситься", "short_name": "Вес", "url": "./index.html#/weight", "icons": [{ "src": "assets/img/icon.svg", "sizes": "any", "type": "image/svg+xml" }] },
+    { "name": "Дневник питания", "short_name": "Питание", "url": "./index.html#/nutrition" },
+    { "name": "Тренировка", "short_name": "Трени", "url": "./index.html#/training" },
+    { "name": "Задания дня", "short_name": "Квесты", "url": "./index.html#/quests" }
+  ]
+}

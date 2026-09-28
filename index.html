@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="azure">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05060d">
+<meta name="description" content="SYSTEM — персональный трекер снижения веса в стилистике Solo Leveling: система, уровни, квесты, XP.">
+<title>SYSTEM // Охотник</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;700;900&family=Russo+One&family=Orbitron:wght@500;700;900&family=Rubik:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/views.css">
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg__grid"></div>
+  <div class="bg__glow bg__glow--a"></div>
+  <div class="bg__glow bg__glow--b"></div>
+  <div class="bg__glow bg__glow--c"></div>
+  <div class="bg__floor"></div>
+  <div class="bg__particles" id="bgParticles"></div>
+  <div class="bg__scan"></div>
+  <div class="bg__vignette"></div>
+</div>
+
+<div class="boot" id="boot">
+  <div class="boot__ring"></div>
+  <div class="boot__text" id="bootText">ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ…</div>
+</div>
+
+<div class="shell" id="shell" hidden>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="side">
+    <div class="side__brand">
+      <div class="side__logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M24 3 4 11v14c0 10.5 8.2 18.4 20 20 11.8-1.6 20-9.5 20-20V11L24 3Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 15l9 9-9 9-9-9 9-9Z" fill="currentColor" opacity=".22"/><path d="M24 15l9 9-9 9-9-9 9-9Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </div>
+      <div class="side__title">
+        <b>SYSTEM</b>
+        <span>ТЕНЕВОЙ ОХОТНИК</span>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav" aria-label="Разделы">
+      <a class="nav__item is-active" href="#/dashboard" data-view="dashboard"><i class="ico" data-ico="home"></i><span>Статус</span><em class="nav__key">1</em></a>
+      <a class="nav__item" href="#/weight"    data-view="weight"><i class="ico" data-ico="scale"></i><span>Вес</span><em class="nav__key">2</em></a>
+      <a class="nav__item" href="#/nutrition" data-view="nutrition"><i class="ico" data-ico="flame"></i><span>Питание</span><em class="nav__key">3</em></a>
+      <a class="nav__item" href="#/training"  data-view="training"><i class="ico" data-ico="sword"></i><span>Тренировки</span><em class="nav__key">4</em></a>
+      <a class="nav__item" href="#/quests"    data-view="quests"><i class="ico" data-ico="scroll"></i><span>Квесты</span><em class="nav__key">5</em></a>
+      <a class="nav__item" href="#/progress"  data-view="progress"><i class="ico" data-ico="chart"></i><span>Прогресс</span><em class="nav__key">6</em></a>
+      <a class="nav__item" href="#/settings"  data-view="settings"><i class="ico" data-ico="gear"></i><span>Система</span><em class="nav__key">7</em></a>
+    </nav>
+
+    <div class="side__foot">
+      <div class="rank-mini" id="sideRank">
+        <div class="rank-mini__badge" data-rank>E</div>
+        <div class="rank-mini__body">
+          <b id="sideRankName">Ранг E</b>
+          <div class="xpbar xpbar--sm"><i id="sideXpFill" style="width:0%"></i></div>
+          <span id="sideXpTxt">0 / 100 XP</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+    <header class="hud">
+      <button class="hud__burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+
+      <div class="hud__left">
+        <div class="hud__date" id="hudDate">—</div>
+        <div class="hud__clock" id="hudClock">00:00</div>
+      </div>
+
+      <div class="hud__center">
+        <div class="hud-stat" title="Калории за сегодня">
+          <i class="ico" data-ico="flame"></i>
+          <div><b id="hudKcal">0</b><span>/ <span id="hudKcalGoal">0</span> ккал</span></div>
+        </div>
+        <div class="hud-stat" title="Вода">
+          <i class="ico" data-ico="drop"></i>
+          <div><b id="hudWater">0</b><span>/ <span id="hudWaterGoal">2000</span> мл</span></div>
+        </div>
+        <div class="hud-stat" title="Серия дней">
+          <i class="ico" data-ico="fire"></i>
+          <div><b id="hudStreak">0</b><span>дн. серия</span></div>
+        </div>
+        <div class="hud-stat" title="Текущий вес">
+          <i class="ico" data-ico="scale"></i>
+          <div><b id="hudWeight">—</b><span id="hudWeightGoal">кг</span></div>
+        </div>
+      </div>
+
+      <div class="hud__right">
+        <div class="hud-lvl">
+          <div class="hud-lvl__num" id="hudLevel">1</div>
+          <div class="hud-lvl__body">
+            <b>УРОВЕНЬ <span id="hudLevelTxt">1</span></b>
+            <div class="xpbar"><i id="hudXpFill" style="width:0%"></i></div>
+            <span id="hudXpTxt">0 / 100 XP</span>
+          </div>
+        </div>
+        <button class="iconbtn" id="btnBell" title="Уведомления"><i class="ico" data-ico="bell"></i><u id="bellDot" hidden></u></button>
+        <button class="iconbtn" id="btnSound" title="Звук"><i class="ico" data-ico="sound"></i></button>
+      </div>
+    </header>
+
+    <main class="view" id="view" tabindex="-1"></main>
+
+    <footer class="foot">
+      <span>SYSTEM v1.0 · данные хранятся локально в браузере</span>
+      <span class="foot__dot"></span>
+      <span id="footMsg">Ожидание охотника…</span>
+    </footer>
+  </div>
+
+  <!-- ══ MOBILE NAV ══ -->
+  <nav class="mnav" aria-label="Мобильная навигация">
+    <a class="mnav__item is-active" href="#/dashboard" data-view="dashboard"><i class="ico" data-ico="home"></i><span>Статус</span></a>
+    <a class="mnav__item" href="#/weight" data-view="weight"><i class="ico" data-ico="scale"></i><span>Вес</span></a>
+    <a class="mnav__item" href="#/nutrition" data-view="nutrition"><i class="ico" data-ico="flame"></i><span>Пита</span></a>
+    <a class="mnav__item" href="#/training" data-view="training"><i class="ico" data-ico="sword"></i><span>Трени</span></a>
+    <a class="mnav__item" href="#/progress" data-view="progress"><i class="ico" data-ico="chart"></i><span>Прог</span></a>
+  </nav>
+</div>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" hidden>
+  <div class="modal__backdrop" data-close></div>
+  <div class="modal__box panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal__head">
+      <h3 id="modalTitle">Заголовок</h3>
+      <button class="iconbtn" data-close aria-label="Закрыть"><i class="ico" data-ico="close"></i></button>
+    </div>
+    <div class="modal__body" id="modalBody"></div>
+  </div>
+</div>
+<canvas class="fx" id="fx" aria-hidden="true"></canvas>
+
+<script src="assets/js/data/food.js"></script>
+<script src="assets/js/data/exercises.js"></script>
+<script src="assets/js/data/quests.js"></script>
+<script src="assets/js/core/util.js"></script>
+<script src="assets/js/core/calc.js"></script>
+<script src="assets/js/core/store.js"></script>
+<script src="assets/js/core/audio.js"></script>
+<script src="assets/js/core/ui.js"></script>
+<script src="assets/js/core/chart.js"></script>
+<script src="assets/js/core/fx.js"></script>
+<script src="assets/js/views/dashboard.js"></script>
+<script src="assets/js/views/weight.js"></script>
+<script src="assets/js/views/nutrition.js"></script>
+<script src="assets/js/views/training.js"></script>
+<script src="assets/js/views/quests.js"></script>
+<script src="assets/js/views/progress.js"></script>
+<script src="assets/js/views/settings.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -120,15 +120,17 @@ window.Chart = (function () {
       svg.appendChild(t);
     }
 
-    /* область + линия */
+    /* область + линия — строим только при >= 2 точках,
+       иначе путь начинается с "L" и SVG ругается на атрибут d */
     const pts = data.map((d, i) => [X(i), Y(d.y)]);
-    if (o.area !== false) {
-      const ad = smooth(pts) + 'L' + U.round(pts[pts.length - 1][0], 2) + ' ' + (pad.t + ih) +
-                'L' + U.round(pts[0][0], 2) + ' ' + (pad.t + ih) + 'Z';
-      svg.appendChild(mk('path', { d: ad, fill: 'url(#' + uid + ')' }));
+    if (pts.length >= 2) {
+      if (o.area !== false) {
+        const ad = smooth(pts) + 'L' + U.round(pts[pts.length - 1][0], 2) + ' ' + (pad.t + ih) +
+                  'L' + U.round(pts[0][0], 2) + ' ' + (pad.t + ih) + 'Z';
+        svg.appendChild(mk('path', { d: ad, fill: 'url(#' + uid + ')' }));
+      }
+      svg.appendChild(mk('path', { d: smooth(pts), class: 'ch-line', stroke: col, filter: 'drop-shadow(0 0 6px ' + col + '88)' }));
     }
-    const path = mk('path', { d: smooth(pts), class: 'ch-line', stroke: col, filter: 'drop-shadow(0 0 6px ' + col + '88)' });
-    svg.appendChild(path);
 
     /* точки */
     const dots = [];
@@ -264,7 +266,7 @@ window.Chart = (function () {
   /* ═══ КОЛЬЦЕВАЯ ДИАГРАММА (макросы) ═══ */
   function donut(segs, size, thick) {
     size = size || 168; thick = thick || 22;
-    const r = size / 2 - thick / 2, C = 2 * Math.PI * r;
+    const r = Math.max(2, size / 2 - thick / 2), C = 2 * Math.PI * r;
     const total = U.sum(segs.map(s => s.v)) || 1;
     let acc = 0, out = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" style="transform:rotate(-90deg)">';
     segs.forEach(function (s) {

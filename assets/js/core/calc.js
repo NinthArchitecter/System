@@ -203,6 +203,7 @@ window.C = (function () {
   }
 
   const clamp = U.clamp;
+  const round = U.round;
 
   return { xpNeeded, xpTotal, levelFromXp, rank, nextRank, RANKS, XP, ACTIVITY, age, bmr, tdee,
            calorieTarget, macroTarget, waterTarget, bmi, bmiCat, bmiPos, healthyWeight,

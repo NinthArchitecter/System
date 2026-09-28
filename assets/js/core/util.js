@@ -29,12 +29,12 @@ window.U = (function () {
   const sum = a => a.reduce((x, y) => x + y, 0);
   const avg = a => a.length ? sum(a) / a.length : 0;
   const max = function () {
-    const a = Array.prototype.slice.call(arguments);
+    let a = Array.prototype.slice.call(arguments);
     if (a.length === 1 && Array.isArray(a[0])) a = a[0];
     return a.length ? Math.max.apply(null, a) : 0;
   };
   const min = function () {
-    const a = Array.prototype.slice.call(arguments);
+    let a = Array.prototype.slice.call(arguments);
     if (a.length === 1 && Array.isArray(a[0])) a = a[0];
     return a.length ? Math.min.apply(null, a) : 0;
   };

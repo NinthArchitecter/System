@@ -65,7 +65,7 @@ window.FX = (function () {
         ctx.globalAlpha = Math.max(0, p.life);
         ctx.fillStyle = p.col;
         ctx.shadowBlur = 10; ctx.shadowColor = p.col;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0, p.r * p.life), 0, Math.PI * 2); ctx.fill();
       });
       ctx.globalAlpha = 1; ctx.shadowBlur = 0;
       if (parts.length) raf = requestAnimationFrame(tick);

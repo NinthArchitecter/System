@@ -221,7 +221,14 @@ Views.quests = (function () {
     const s = Store.snapshot();
     U.on(host, 'click', '[data-q]', function (e, b) {
       const id = b.getAttribute('data-q');
-      if (Store.questDone(U.today(), id)) { Store.uncompleteQuest(U.today(), id); SFX.play('del'); App.afterAction(); return; }
+      /* квесты выполняются автоматически в Store.checkQuests() и сразу дают XP,
+         поэтому повторный клик по выполненному не должен ничего отменять —
+         иначе checkQuests() тут же выполнит его снова и начислит XP второй раз */
+      if (Store.questDone(U.today(), id)) {
+        const dq = s.quests.find(x => x.id === id);
+        UI.info('Уже выполнено', (dq ? dq.title : 'Квест') + ' — награда уже начислена.');
+        return;
+      }
       const q = s.quests.find(x => x.id === id);
       if (!q) return;
       const need = q.target || 1;

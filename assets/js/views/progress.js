@@ -288,7 +288,7 @@ Views.progress = (function () {
         '<h1>Прогресс</h1>' +
         '<p>Полная картина: тело, питание, тренировки, достижения и лента опыта. Данные считаются из всех твоих записей.</p>' +
       '</div><div class="row"><div class="seg" id="pTabs">' +
-        TABS.map(t => '<button data-t="' + t.k + '" class="' + (t === tab ? 'is-on' : '') + '">' + t.n + '</button>').join('') +
+        TABS.map(t => '<button data-t="' + t.k + '" class="' + (t.k === tab ? 'is-on' : '') + '">' + t.n + '</button>').join('') +
       '</div></div></div>' +
       statBlock(s) +
       '<div class="mt3" id="pBody">' + tabHtml(s) + '</div>';

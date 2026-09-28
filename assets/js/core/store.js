@@ -5,6 +5,7 @@
 window.Store = (function () {
   'use strict';
 
+  const $ = U.$, $$ = U.$$;
   const KEY = 'system.solo.v1';
   const VERSION = 1;
 
@@ -581,18 +582,25 @@ window.Store = (function () {
   }
   function round2(v) { return Math.round(v * 10) / 10; }
 
-  function awardIf(id) {
+  function awardIf(id, cache) {
     if (S.ach[id]) return false;
     const a = window.DB_QUESTS.achievements.find(x => x.id === id);
     if (!a) return false;
-    let s;
-    try { s = stats(); } catch (e) { return false; }
-    if (!a.check(s)) return false;
+    /* check-функции в data/quests.js читают s.stats.* */
+    try {
+      const s = cache && cache.stats ? cache : { stats: stats() };
+      if (!a.check(s)) return false;
+    } catch (e) { return false; }
     S.ach[id] = Date.now();
     newAch.push(a);
     return true;
   }
-  function checkAllAchievements() { window.DB_QUESTS.achievements.forEach(a => awardIf(a.id)); }
+  function checkAllAchievements() {
+    /* stats() считается один раз на весь проход */
+    let cache = null;
+    try { cache = { stats: stats() }; } catch (e) { return; }
+    window.DB_QUESTS.achievements.forEach(a => awardIf(a.id, cache));
+  }
   function achList() {
     return window.DB_QUESTS.achievements.map(a => ({ a: a, got: S.ach[a.id] ? U.relTime(S.ach[a.id]) : null }));
   }

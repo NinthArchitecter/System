@@ -274,9 +274,11 @@ Views.dashboard = (function () {
     /* квесты */
     U.on(host, 'click', '[data-quest]', function (e, btn) {
       const id = btn.getAttribute('data-quest');
+      /* квесты выполняются автоматически (Store.checkQuests) и сразу дают XP —
+         повторный клик по выполненному ничего не отменяет, иначе XP начисляется дважды */
       if (Store.questDone(s.today, id)) {
-        Store.uncompleteQuest(s.today, id);
-        App.refresh();
+        const dq = s.quests.find(x => x.id === id);
+        UI.info('Уже выполнено', (dq ? dq.title : 'Квест') + ' — награда уже начислена.');
         return;
       }
       /* проверяем выполнимость авто-метрик */

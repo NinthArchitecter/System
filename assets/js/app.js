@@ -454,26 +454,6 @@ window.App = (function () {
           draw();
         });
         U.on(box, 'click', '#obBack', function () { step--; SFX.play('click'); draw(); });
-        U.on(v, 'click', '#obGo', function () {
-          Store.saveProfile({
-            name: data.name, sex: data.sex, birthDate: data.birthDate,
-            height: data.height, activity: data.activity, startWeight: data.weight
-          });
-          Store.saveGoal({ mode: data.mode, startWeight: data.startWeight, targetWeight: data.targetWeight, ratePerWeek: data.ratePerWeek });
-          Store.saveSettings({ onboarded: true });
-          /* стартовая запись веса, чтобы график сразу жил */
-          Store.state().weight.push({ id: U.uid(), date: U.today(), kg: data.startWeight, fat: null, note: 'старт системы' });
-          Store.addXp(50, 'Инициализация системы', '💠', U.today());
-          Store.commit('Система инициализирована');
-          SFX.play('levelup');
-          FX.levelUp();
-          UI.alert({ kind: 'level', tag: 'СИСТЕМА ИНИЦИАЛИЗИРОВАНА', life: 7000,
-            title: 'Добро пожаловать, ' + data.name,
-            text: 'Уровень 1 · +50 XP за старт. Загляни в «Задания» — там уже есть твои первые цели.' });
-          wrap.remove();
-          $('#shell').hidden = false;
-          startApp();
-        });
         U.on(box, 'click', '#obMode button', function (e, b) {
           data.mode = b.getAttribute('data-m');
           $$('#obMode button', box).forEach(x => x.classList.remove('is-on'));
@@ -483,9 +463,35 @@ window.App = (function () {
         });
         U.on(box, 'input', '#obRate', function (e) { data.ratePerWeek = U.num(e.target.value, 0.7); updatePrev(); });
         U.on(box, 'change', '#obTarget', function () { updatePrev(); });
+        /* финальная кнопка живёт только на шаге 3, поэтому слушатель
+           вешаем на свежий узел box, а не на постоянный #obView */
+        U.on(box, 'click', '#obGo', function () { bootOnb(data, wrap); });
       }
     }
     draw();
+  }
+
+  /* завершение онбординга */
+  function bootOnb(data, wrap) {
+    if (Store.settings().onboarded) return;
+    Store.saveProfile({
+      name: data.name, sex: data.sex, birthDate: data.birthDate,
+      height: data.height, activity: data.activity, startWeight: data.weight
+    });
+    Store.saveGoal({ mode: data.mode, startWeight: data.startWeight, targetWeight: data.targetWeight, ratePerWeek: data.ratePerWeek });
+    Store.saveSettings({ onboarded: true });
+    /* стартовая запись веса, чтобы график сразу жил */
+    if (!Store.weightOn(U.today())) Store.logWeight(U.today(), data.startWeight, null, 'старт системы');
+    Store.addXp(50, 'Инициализация системы', '💠', U.today());
+    Store.commit('Система инициализирована');
+    SFX.play('levelup');
+    FX.levelUp();
+    UI.alert({ kind: 'level', tag: 'СИСТЕМА ИНИЦИАЛИЗИРОВАНА', life: 7000,
+      title: 'Добро пожаловать, ' + data.name,
+      text: 'Уровень 1 · +50 XP за старт. Загляни в «Задания» — там уже есть твои первые цели.' });
+    wrap.remove();
+    $('#shell').hidden = false;
+    startApp();
   }
 
   /* ═══ 9. СТАРТ ═══ */

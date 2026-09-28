@@ -304,6 +304,9 @@ Views.training = (function () {
 
   /* ── RENDER ── */
   function render(host) {
+    /* инициализация черновика ДО сборки html: иначе первый экран
+       показывает «Нет упражнений», хотя draft уже наполнен планом */
+    if (!draft.ex.length && !draft.name) newDraft(Store.activePlan() || 'p_beginner_full');
     const s = Store.snapshot();
     const ws = Store.workoutsAll();
     const last7 = ws.filter(w => w.date >= U.addDays(U.today(), -6));
@@ -344,9 +347,6 @@ Views.training = (function () {
 
   /* ── MOUNT ── */
   function mount(host) {
-    /* если черновик пуст — предлагаем план */
-    if (!draft.ex.length && !draft.name) newDraft(Store.activePlan() || 'p_beginner_full');
-
     const wp = U.$('#weekPlan', host);
     if (wp) wp.innerHTML = weekPlan();
 

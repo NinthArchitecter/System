@@ -154,10 +154,20 @@ ul{ margin:0; padding:0; list-style:none; }
 @keyframes spin{ to{ transform:rotate(360deg); } }
 .boot__text{ font-family:var(--f-hud); font-size:12px; letter-spacing:.32em; color:var(--ac-lt); text-align:center; padding:0 20px; min-height:20px; }
 
+/* атрибут hidden должен реально скрывать элемент: класс .shell задаёт display:grid
+   и перебивает браузерное [hidden]{display:none}, из-за чего «скрытая» оболочка
+   занимала 100dvh и выталкивала онбординг за пределы экрана — кнопки не кликались */
+[hidden]{ display:none !important; }
+
 /* ── 4. SHELL ────────────────────────────────────────────────── */
 .shell{
   position:relative; z-index:1; height:100dvh;
   display:grid; grid-template-columns:var(--side-w) minmax(0,1fr);
+  /* ряд задаём высотой экрана: иначе auto-ряд растёт под контент,
+     .view не становится скроллером, а body{overflow:hidden} обрезает
+     низ страницы и кнопки туда не кликнуть (в т.ч. онбординг) */
+  grid-template-rows:minmax(0,1fr);
+  overflow:hidden;
 }
 
 /* ── SIDEBAR ── */
@@ -633,7 +643,8 @@ ul{ margin:0; padding:0; list-style:none; }
 /* toast / system alerts */
 .toasts{ position:fixed; top:16px; right:16px; z-index:150; display:flex; flex-direction:column; gap:10px; max-width:min(94vw,370px); pointer-events:none; }
 .toast{
-  position:relative; pointer-events:auto; padding:13px 15px 13px 17px; overflow:hidden;
+  /* тост информационный и не должен перехватывать клики по кнопкам под ним */
+  position:relative; pointer-events:none; padding:13px 15px 13px 17px; overflow:hidden;
   background:linear-gradient(120deg, rgba(14,24,54,.97), rgba(6,10,24,.97));
   border:1px solid var(--line-hi); border-left:3px solid var(--ac);
   border-radius:4px 12px 12px 4px;
